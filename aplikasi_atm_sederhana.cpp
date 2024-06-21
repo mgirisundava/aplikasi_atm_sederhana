@@ -4,17 +4,28 @@
 
 void login(char names[][50], char banks[][50], int pin[], int *currentUser)
 {
-    int enteredPin;
+    int enteredPin = -1;
     char name[50];
     int isLoginSuccess = 0;
 
     do
     {
+
         system("clear");
+        printf("[!] Ketuk 0 untuk membatalkan.\n\n");
+
         printf("Masukkan PIN (6 Digit): ");
         scanf("%d", &enteredPin);
 
-        if (enteredPin >= 100000 && enteredPin <= 999999)
+        if (enteredPin == 0)
+        {
+            system("clear");
+            printf("Terima kasih telah menggunakan ATM ini!\n\n");
+            return;
+        }
+        else
+
+            if (enteredPin >= 100000 && enteredPin <= 999999)
         {
             int isPinCorrect = 0;
 
@@ -275,6 +286,7 @@ void transfer(char names[][50], char banks[][50], double balances[], int pins[],
         system("clear");
         return;
     }
+
     for (int i = 0; i < 3; i++)
     {
         if (accountNumber == accountNumbers[i])
@@ -283,6 +295,7 @@ void transfer(char names[][50], char banks[][50], double balances[], int pins[],
             break;
         }
     }
+
     if (selectedRecipent == -1)
     {
         system("clear");
@@ -293,17 +306,21 @@ void transfer(char names[][50], char banks[][50], double balances[], int pins[],
         system("clear");
         return;
     }
+
     while (isExit == false)
     {
         printf("\nPenerima: %s\n", names[selectedRecipent]);
         printf("Bank Tujuan: %s\n", banks[selectedRecipent]);
+
         if (strcmp(banks[selectedRecipent], "BCA") != 0)
         {
             printf("Biaya Admin: Rp. 6.500\n\n");
         }
+
         printf("[!] Ketuk 0 untuk membatalkan transaksi.\n\n");
         printf("Masukkan nominal yang akan ditransfer: ");
         scanf("%d", &amount);
+
         if (amount == 0)
         {
             system("clear");
@@ -322,10 +339,12 @@ void transfer(char names[][50], char banks[][50], double balances[], int pins[],
         else
         {
             double totalAmount = amount;
+
             if (strcmp(banks[selectedRecipent], "BCA") != 0)
             {
                 totalAmount += 6500;
             }
+
             if (totalAmount > balances[currentUser])
             {
                 system("clear");
@@ -409,6 +428,7 @@ int main()
         else if (choice == 6)
         {
             switchAccount(names, banks, pins, &currentUser);
+
             if (currentUser == -1)
             {
                 printf("Program diberhentikan.\n");
@@ -419,6 +439,7 @@ int main()
         {
             system("clear");
             printf("Terima kasih telah menggunakan ATM ini!\n\n");
+            printf("Program diberhentikan.\n");
             isExit = true;
         }
         else
