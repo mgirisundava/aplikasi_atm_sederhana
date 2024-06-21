@@ -13,20 +13,23 @@ void login(char names[][50], char banks[][50], int pin[], int *currentUser)
         system("clear");
         printf("Masukkan PIN (6 Digit): ");
         scanf("%d", &enteredPin);
+
         if (enteredPin >= 100000 && enteredPin <= 999999)
         {
             int isPinCorrect = 0;
+
             for (int i = 0; i < 3; i++)
             {
                 if (enteredPin == pin[i])
                 {
                     isPinCorrect = 1;
+
                     if (strcmp(banks[i], "BCA") == 0)
                     {
                         strcpy(name, names[i]);
                         *currentUser = i;
                         system("clear");
-                        printf("Selamat datang %s\n", name);
+                        printf("Selamat datang %s\n\n", name);
                         isLoginSuccess = 1;
                         break;
                     }
@@ -42,6 +45,7 @@ void login(char names[][50], char banks[][50], int pin[], int *currentUser)
                     }
                 }
             }
+
             if (!isPinCorrect)
             {
                 system("clear");
@@ -97,6 +101,7 @@ void changePin(int pin[], int currentUser)
     system("clear");
     printf("Masukkan PIN baru (6 Digit): ");
     scanf("%d", &newPin);
+
     if (newPin >= 100000 && newPin <= 999999)
     {
         system("clear");
@@ -136,6 +141,7 @@ void withdraw(double balances[], int currentUser)
         printf("6. Batal\n\n");
         printf("Pilih opsi: ");
         scanf("%d", &choice);
+
         if (choice == 1)
         {
             balances[currentUser] -= 50000;
@@ -189,6 +195,7 @@ void withdraw(double balances[], int currentUser)
             system("clear");
             printf("Masukkan jumlah tarik tunai: Rp. ");
             scanf("%lf", &amount);
+
             if (amount <= 0)
             {
                 system("clear");
@@ -212,6 +219,7 @@ void withdraw(double balances[], int currentUser)
             else
             {
                 balances[currentUser] -= amount;
+
                 system("clear");
                 printf("Tarik tunai berhasil! Saldo Anda sekarang: Rp. %.2f\n\n", balances[currentUser]);
                 printf("Ketuk apapun untuk kembali.");
@@ -245,18 +253,118 @@ void switchAccount(char names[][50], char banks[][50], int pin[], int *currentUs
     login(names, banks, pin, currentUser);
 }
 
+void transfer(char names[][50], char banks[][50], double balances[], int pins[], int accountNumbers[], int currentUser)
+{
+    int pin;
+    int amount;
+    int accountNumber;
+    int selectedRecipent = -1;
+    bool isExit = false;
+
+    system("clear");
+    printf("Masukkan no. rekening tujuan: ");
+    scanf("%d", &accountNumber);
+
+    if (accountNumber == accountNumbers[currentUser])
+    {
+        system("clear");
+        printf("No. rekening tujuan adalah no. rekening Anda.\n\n");
+        printf("Ketuk apapun untuk kembali.");
+        getchar();
+        getchar();
+        system("clear");
+        return;
+    }
+    for (int i = 0; i < 3; i++)
+    {
+        if (accountNumber == accountNumbers[i])
+        {
+            selectedRecipent = i;
+            break;
+        }
+    }
+    if (selectedRecipent == -1)
+    {
+        system("clear");
+        printf("No. rekening tujuan tidak ditemukan.\n\n");
+        printf("Ketuk apapun untuk kembali.");
+        getchar();
+        getchar();
+        system("clear");
+        return;
+    }
+    while (isExit == false)
+    {
+        printf("\nPenerima: %s\n", names[selectedRecipent]);
+        printf("Bank Tujuan: %s\n", banks[selectedRecipent]);
+        if (strcmp(banks[selectedRecipent], "BCA") != 0)
+        {
+            printf("Biaya Admin: Rp. 6.500\n\n");
+        }
+        printf("[!] Ketuk 0 untuk membatalkan transaksi.\n\n");
+        printf("Masukkan nominal yang akan ditransfer: ");
+        scanf("%d", &amount);
+        if (amount == 0)
+        {
+            system("clear");
+            isExit = true;
+            return;
+        }
+        else if (amount <= 0)
+        {
+            system("clear");
+            printf("Jumlah nominal harus lebih dari nol.\n\n");
+            printf("Ketuk apapun untuk kembali.");
+            getchar();
+            getchar();
+            system("clear");
+        }
+        else
+        {
+            double totalAmount = amount;
+            if (strcmp(banks[selectedRecipent], "BCA") != 0)
+            {
+                totalAmount += 6500;
+            }
+            if (totalAmount > balances[currentUser])
+            {
+                system("clear");
+                printf("Mohon maaf, saldo Anda tidak cukup.\n\n");
+                printf("Ketuk apapun untuk kembali.");
+                getchar();
+                getchar();
+                system("clear");
+            }
+            else
+            {
+                balances[selectedRecipent] += amount;
+                balances[currentUser] -= totalAmount;
+
+                system("clear");
+                printf("Transfer berhasil! Saldo Anda sekarang: Rp. %.2f\n\n", balances[currentUser]);
+                printf("Ketuk apapun untuk kembali.");
+                getchar();
+                getchar();
+                system("clear");
+                isExit = true;
+            }
+        }
+    }
+}
+
 int main()
 {
 
     char names[3][50] = {"Giri", "Riki", "Hilmi"};
     char banks[3][50] = {"BCA", "BRI", "BCA"};
     double balances[3] = {3500000, 2500000, 10000000};
-    int pin[3] = {111111, 222222, 333333};
+    int pins[3] = {111111, 222222, 333333};
+    int accountNumbers[3] = {101010, 202020, 303030};
     int currentUser = -1;
     int choice;
     bool isExit = false;
 
-    login(names, banks, pin, &currentUser);
+    login(names, banks, pins, &currentUser);
 
     if (currentUser == -1)
     {
@@ -291,15 +399,16 @@ int main()
         }
         else if (choice == 4)
         {
-            // TRANSFER
+
+            transfer(names, banks, balances, pins, accountNumbers, currentUser);
         }
         else if (choice == 5)
         {
-            changePin(pin, currentUser);
+            changePin(pins, currentUser);
         }
         else if (choice == 6)
         {
-            switchAccount(names, banks, pin, &currentUser);
+            switchAccount(names, banks, pins, &currentUser);
             if (currentUser == -1)
             {
                 printf("Program diberhentikan.\n");
