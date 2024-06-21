@@ -2,6 +2,18 @@
 #include <string.h>
 #include <stdlib.h>
 
+/*
+KELOMPOK:
+- MOHAMAD GIRI SUNDAVA
+- RIKI GUNTARA
+- HILMI NIBRAS
+
+TUGAS AKHIR MATA KULIAH ALGORITMA & PEMROGRAMAN 1
+
+APLIKASI ATM SEDERHANA
+*/
+
+// LOGIN
 void login(char names[][50], char banks[][50], int pin[], int *currentUser)
 {
     int enteredPin = -1;
@@ -13,7 +25,6 @@ void login(char names[][50], char banks[][50], int pin[], int *currentUser)
 
         system("clear");
         printf("[!] Ketuk 0 untuk membatalkan.\n\n");
-
         printf("Masukkan PIN (6 Digit): ");
         scanf("%d", &enteredPin);
 
@@ -79,6 +90,7 @@ void login(char names[][50], char banks[][50], int pin[], int *currentUser)
     } while (!isLoginSuccess);
 }
 
+// CEK SALDO
 void checkBalance(char names[][50], double balances[], int currentUser)
 {
     system("clear");
@@ -89,6 +101,7 @@ void checkBalance(char names[][50], double balances[], int currentUser)
     system("clear");
 }
 
+// SETOR TUNAI
 void deposit(double balances[], int currentUser)
 {
     double amount;
@@ -105,6 +118,7 @@ void deposit(double balances[], int currentUser)
     system("clear");
 }
 
+// UBAH PIN
 void changePin(int pin[], int currentUser)
 {
     int newPin;
@@ -134,6 +148,7 @@ void changePin(int pin[], int currentUser)
     }
 }
 
+// TARIK TUNAI
 void withdraw(double balances[], int currentUser)
 {
     int choice;
@@ -258,12 +273,14 @@ void withdraw(double balances[], int currentUser)
     }
 }
 
+// KELUAR
 void switchAccount(char names[][50], char banks[][50], int pin[], int *currentUser)
 {
     *currentUser = -1;
     login(names, banks, pin, currentUser);
 }
 
+// TRANSFER
 void transfer(char names[][50], char banks[][50], double balances[], int pins[], int accountNumbers[], int currentUser)
 {
     int pin;
@@ -374,6 +391,7 @@ void transfer(char names[][50], char banks[][50], double balances[], int pins[],
 int main()
 {
 
+    // USER DATA
     char names[3][50] = {"Giri", "Riki", "Hilmi"};
     char banks[3][50] = {"BCA", "BRI", "BCA"};
     double balances[3] = {3500000, 2500000, 10000000};
@@ -383,6 +401,7 @@ int main()
     int choice;
     bool isExit = false;
 
+    // LOGIN
     login(names, banks, pins, &currentUser);
 
     if (currentUser == -1)
@@ -406,27 +425,32 @@ int main()
 
         if (choice == 1)
         {
+            // PEMANGGILAN CEK SALDO
             checkBalance(names, balances, currentUser);
         }
         else if (choice == 2)
         {
+            // PEMANGGILAN TARIK TUNAI
             withdraw(balances, currentUser);
         }
         else if (choice == 3)
         {
+            // PEMANGGILAN SETOR TUNAI
             deposit(balances, currentUser);
         }
         else if (choice == 4)
         {
-
+            // PEMANGGILAN TRANSFER
             transfer(names, banks, balances, pins, accountNumbers, currentUser);
         }
         else if (choice == 5)
         {
+            // PEMANGGILAN UBAH PIN
             changePin(pins, currentUser);
         }
         else if (choice == 6)
         {
+            // PEMANGGILAN KELUAR
             switchAccount(names, banks, pins, &currentUser);
 
             if (currentUser == -1)
