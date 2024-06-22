@@ -124,10 +124,16 @@ void changePin(int pin[], int currentUser)
     int newPin;
 
     system("clear");
+    printf("[!] Ketuk 0 untuk membatalkan.\n\n");
     printf("Masukkan PIN baru (6 Digit): ");
     scanf("%d", &newPin);
 
-    if (newPin >= 100000 && newPin <= 999999)
+    if (newPin == 0)
+    {
+        system("clear");
+        return;
+    }
+    else if (newPin >= 100000 && newPin <= 999999)
     {
         system("clear");
         pin[currentUser] = newPin;
