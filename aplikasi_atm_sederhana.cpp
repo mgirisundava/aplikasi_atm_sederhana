@@ -116,12 +116,20 @@ void deposit(double balances[], int currentUser)
         system("clear");
         return;
     }
-    else
+    else if (int(amount) % 50000 == 0)
     {
-
         balances[currentUser] += amount;
         system("clear");
         printf("Setoran berhasil! Saldo Anda sekarang: Rp. %.2f\n\n", balances[currentUser]);
+        printf("Ketuk apapun untuk kembali.");
+        getchar();
+        getchar();
+        system("clear");
+    }
+    else
+    {
+        system("clear");
+        printf("Jumlah setoran harus kelipatan 50.000 atau 100.000!\n\n");
         printf("Ketuk apapun untuk kembali.");
         getchar();
         getchar();
@@ -236,18 +244,22 @@ void withdraw(double balances[], int currentUser)
         else if (choice == 5)
         {
             system("clear");
-            printf("Masukkan jumlah tarik tunai: Rp. ");
+            printf("[!] Ketuk 0 untuk membatalkan.\n\n");
+            printf("Masukkan jumlah tarik tunai: ");
             scanf("%lf", &amount);
 
-            if (amount <= 0)
+            if (amount == 0)
             {
                 system("clear");
-                printf("Jumlah tarik tunai harus lebih dari nol.\n\n");
+            }
+            else if (amount < 10000)
+            {
+                system("clear");
+                printf("Jumlah tarik tunai harus lebih dari Rp. 10.000.\n\n");
                 printf("Ketuk apapun untuk kembali.");
                 getchar();
                 getchar();
                 system("clear");
-                isExit = true;
             }
             else if (amount > balances[currentUser])
             {
@@ -257,9 +269,8 @@ void withdraw(double balances[], int currentUser)
                 getchar();
                 getchar();
                 system("clear");
-                isExit = true;
             }
-            else
+            else if (int(amount) % 50000 == 0)
             {
                 balances[currentUser] -= amount;
 
@@ -270,6 +281,15 @@ void withdraw(double balances[], int currentUser)
                 getchar();
                 system("clear");
                 isExit = true;
+            }
+            else
+            {
+                system("clear");
+                printf("Jumlah tarikan harus kelipatan 50.000 atau 100.000!\n\n");
+                printf("Ketuk apapun untuk kembali.");
+                getchar();
+                getchar();
+                system("clear");
             }
         }
         else if (choice == 6)
@@ -368,10 +388,10 @@ void transfer(char names[][50], char banks[][50], double balances[], int pins[],
             isExit = true;
             return;
         }
-        else if (amount <= 0)
+        else if (amount < 10000)
         {
             system("clear");
-            printf("Jumlah nominal harus lebih dari nol.\n\n");
+            printf("Jumlah nominal harus lebih dari Rp. 10.000.\n\n");
             printf("Ketuk apapun untuk kembali.");
             getchar();
             getchar();
