@@ -72,7 +72,7 @@ void login(char names[][50], char banks[][50], int pin[], int *currentUser)
             {
                 system("clear");
                 printf("PIN salah!\n\n");
-                printf("nKetuk apapun untuk kembali.");
+                printf("Ketuk apapun untuk kembali.");
                 getchar();
                 getchar();
                 system("clear");
@@ -107,15 +107,26 @@ void deposit(double balances[], int currentUser)
     double amount;
 
     system("clear");
+    printf("[!] Ketuk 0 untuk membatalkan.\n\n");
     printf("Masukkan jumlah setoran: Rp. ");
     scanf("%lf", &amount);
-    balances[currentUser] += amount;
-    system("clear");
-    printf("Setoran berhasil! Saldo Anda sekarang: Rp. %.2f\n\n", balances[currentUser]);
-    printf("Ketuk apapun untuk kembali.");
-    getchar();
-    getchar();
-    system("clear");
+
+    if (amount == 0)
+    {
+        system("clear");
+        return;
+    }
+    else
+    {
+
+        balances[currentUser] += amount;
+        system("clear");
+        printf("Setoran berhasil! Saldo Anda sekarang: Rp. %.2f\n\n", balances[currentUser]);
+        printf("Ketuk apapun untuk kembali.");
+        getchar();
+        getchar();
+        system("clear");
+    }
 }
 
 // UBAH PIN
@@ -296,8 +307,15 @@ void transfer(char names[][50], char banks[][50], double balances[], int pins[],
     bool isExit = false;
 
     system("clear");
+    printf("[!] Ketuk 0 untuk membatalkan.\n\n");
     printf("Masukkan no. rekening tujuan: ");
     scanf("%d", &accountNumber);
+
+    if (accountNumber == 0)
+    {
+        system("clear");
+        return;
+    }
 
     if (accountNumber == accountNumbers[currentUser])
     {
@@ -337,10 +355,10 @@ void transfer(char names[][50], char banks[][50], double balances[], int pins[],
 
         if (strcmp(banks[selectedRecipent], "BCA") != 0)
         {
-            printf("Biaya Admin: Rp. 6.500\n\n");
+            printf("Biaya Admin: Rp. 6.500\n");
         }
 
-        printf("[!] Ketuk 0 untuk membatalkan transaksi.\n\n");
+        printf("\n[!] Ketuk 0 untuk membatalkan transaksi.\n\n");
         printf("Masukkan nominal yang akan ditransfer: ");
         scanf("%d", &amount);
 
